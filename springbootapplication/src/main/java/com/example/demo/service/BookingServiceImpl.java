@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.entity.Booking;
 import com.example.demo.entity.Seat;
+import com.example.demo.repository.BookingRepository;
 import com.example.demo.repository.SeatRepository;
 
 @Service
@@ -13,6 +15,9 @@ public class BookingServiceImpl implements BookingService {
 
     @Autowired
     private SeatRepository seatRepository;
+    
+    @Autowired 
+    private BookingRepository bookingrepository;
 
     @Override
     public void bookSeats(Long showId, List<Long> seatIds) {
@@ -34,5 +39,15 @@ public class BookingServiceImpl implements BookingService {
         }
 
         seatRepository.saveAll(seats);
+    }
+
+    @Override
+    public Booking saveBooking(Booking booking) {
+        return bookingrepository.save(booking);
+    }
+
+    @Override
+    public List<Booking> getBookingsByEmail(String email) {
+        return bookingrepository.findByUserEmail(email);
     }
 }
