@@ -6,6 +6,8 @@ function MovieList() {
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [userName, setUserName] = useState("");
+  const [bookings, setBookings] = useState([]);
+  const [showBookings, setShowBookings] = useState(false);
 
   const navigate = useNavigate();
 
@@ -23,14 +25,31 @@ function MovieList() {
       });
   }, [page]);
 
+  const fetchBookings = async () => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/bookings/${userName}`);
+      const data = await response.json();
+      setBookings(data);
+      setShowBookings(true);
+    } catch (error) {
+      console.error("Error fetching bookings:", error);
+    }
+  };
+
   return (
     <div style={styles.page}>
       <div style={styles.overlay}>
         <div style={styles.header}>
           <h2 style={styles.title}>🎬 Movie List</h2>
+
           {userName && (
             <div style={styles.userInfo}>
               <span>🍿 {userName}</span>
+
+              <button style={styles.myBookingsBtn} onClick={fetchBookings}>
+                🎟 My Bookings
+              </button>
+
               <button
                 style={styles.logoutBtn}
                 onClick={() => {
@@ -86,6 +105,31 @@ function MovieList() {
             Next ➡
           </button>
         </div>
+
+        {showBookings && (
+          <div style={styles.bookingOverlay}>
+            <div style={styles.bookingCard}>
+              <h3>🎟 My Bookings</h3>
+              {bookings.length === 0 ? (
+                <p>No bookings yet.</p>
+              ) : (
+                <ul>
+                  {bookings.map((b) => (
+                    <li key={b.id} style={styles.bookingItem}>
+                      <p><strong>Movie:</strong> {b.movieName}</p>
+                      <p><strong>Theatre:</strong> {b.theatreName}</p>
+                      <p><strong>Seats:</strong> {b.seatNumbers}</p>
+                      <p><strong>Show Time:</strong> {b.showTime}</p>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              <button style={styles.closeBtn} onClick={() => setShowBookings(false)}>
+                Close
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -123,6 +167,15 @@ const styles = {
     gap: "20px",
     fontSize: "18px",
   },
+  myBookingsBtn: {
+    background: "#ffcc00",
+    border: "none",
+    color: "#222",
+    borderRadius: "6px",
+    padding: "6px 14px",
+    cursor: "pointer",
+    fontWeight: "bold",
+  },
   logoutBtn: {
     background: "transparent",
     border: "1px solid #ffcc00",
@@ -130,7 +183,6 @@ const styles = {
     borderRadius: "6px",
     padding: "6px 14px",
     cursor: "pointer",
-    transition: "all 0.3s",
   },
   grid: {
     display: "grid",
@@ -170,7 +222,6 @@ const styles = {
     cursor: "pointer",
     fontWeight: "bold",
     fontSize: "15px",
-    transition: "all 0.3s ease",
   },
   pagination: {
     display: "flex",
@@ -188,9 +239,39 @@ const styles = {
     fontWeight: "bold",
     cursor: "pointer",
   },
-  pageText: {
-    color: "#fff",
-    fontWeight: "500",
+  bookingOverlay: {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background: "rgba(0,0,0,0.7)",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  bookingCard: {
+    background: "white",
+    color: "#111",
+    padding: "30px",
+    borderRadius: "10px",
+    width: "400px",
+    maxHeight: "80vh",
+    overflowY: "auto",
+  },
+  bookingItem: {
+    marginBottom: "15px",
+    borderBottom: "1px solid #ccc",
+    paddingBottom: "10px",
+  },
+  closeBtn: {
+    marginTop: "15px",
+    background: "#ffcc00",
+    border: "none",
+    padding: "10px 20px",
+    borderRadius: "8px",
+    cursor: "pointer",
+    fontWeight: "bold",
   },
 };
 

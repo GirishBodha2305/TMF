@@ -6,28 +6,51 @@ export default function Payment() {
   const navigate = useNavigate();
 
   // Data from SeatSelection
-  const seats = location.state?.seats || [];       // seatIds
-  const seatNumbers = location.state?.seatNumbers; // A1, A2...
+  const seats = location.state?.seats || [];       
+  const seatNumbers = location.state?.seatNumbers;
   const showId = location.state?.showId;
   const total = location.state?.total || 0;
 
+  // NEW FIELDS
+  const movieName = location.state?.movieName;
+  const theatreName = location.state?.theatreName;
+  const showTime = location.state?.showTime;
+
   const completePayment = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/book-seats", {
+      const email = localStorage.getItem("userName");
+
+      // 1️⃣ BLOCK SEATS
+      await fetch("http://localhost:8080/api/book-seats", {
+        method: "POST", 
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          showId: showId,
+          seatIds: seats
+        }),
+      });
+
+      // 2️⃣ SAVE BOOKING DETAILS
+      const response = await fetch("http://localhost:8080/api/save-booking", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          showId,
-          seatIds: seats,
+          showId: showId,
+          seatNumbers: seatNumbers,
+          movieName: movieName,
+          theatreName: theatreName,
+          showTime: showTime,
+          userEmail: email
         }),
       });
 
       if (response.ok) {
         alert("Payment Successful! 🎉 Seats Booked.");
-        navigate("/");
+        navigate("/movieslist");
       } else {
         alert("Booking Failed!");
       }
+
     } catch (err) {
       alert("Payment Error!");
       console.log(err);
@@ -41,6 +64,9 @@ export default function Payment() {
 
         <div style={styles.section}>
           <h3 style={styles.sectionTitle}>🎟 Booking Summary</h3>
+          <p><strong>Movie:</strong> {movieName}</p>
+          <p><strong>Theatre:</strong> {theatreName}</p>
+          <p><strong>Show Time:</strong> {showTime}</p>
           <p><strong>Seats:</strong> {seatNumbers}</p>
           <p><strong>Total Amount:</strong> ₹ {total}</p>
         </div>

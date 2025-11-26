@@ -20,9 +20,19 @@ export default function MovieShows() {
         <div key={s.showId} style={styles.card}>
           <h3>{s.theatre.theatreName} - {s.theatre.location}</h3>
           <p>⏱ {s.showTime}</p>
+
+          {/* ⭐ SEND MOVIE + THEATRE + TIME TO SeatSelection */}
           <button
             style={styles.button}
-            onClick={() => navigate(`/shows/${s.showId}/seats`)}
+            onClick={() =>
+              navigate(`/shows/${s.showId}/seats`, {
+                state: {
+                  movieName: s.movie.movieTitle,
+                  theatreName: s.theatre.theatreName,
+                  showTime: s.showTime,
+                }
+              })
+            }
           >
             Select Seats
           </button>

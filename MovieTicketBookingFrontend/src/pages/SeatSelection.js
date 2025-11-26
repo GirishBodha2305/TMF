@@ -1,24 +1,36 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 
 export default function SeatSelection() {
   const { showId } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // ⭐ Values coming from MovieShows.js
+  const movieNameFromShows = location.state?.movieName;
+  const theatreNameFromShows = location.state?.theatreName;
+  const showTimeFromShows = location.state?.showTime;
 
   const [seats, setSeats] = useState([]);
   const [selected, setSelected] = useState([]);
+  const [showInfo, setShowInfo] = useState(null);
 
   useEffect(() => {
+    // Fetch show details (movie, theatre, show time)
+    fetch(`http://localhost:8080/api/shows/${showId}`)
+      .then(res => res.json())
+      .then(data => setShowInfo(data));
+
+    // Fetch seats for the show
     fetch(`http://localhost:8080/api/shows/${showId}/seats`)
       .then(res => res.json())
-      .then(data => {
-        console.log("Seats Response:", data);
-        setSeats(data);
-      });
+      .then(data => setSeats(data));
+
   }, [showId]);
 
+  // Toggle seat selection
   const toggleSeat = (seat) => {
-    if (seat.booked) return;
+    if (seat.booked) return; // Ignore booked seats
 
     const seatId = seat.id;
 
@@ -29,6 +41,7 @@ export default function SeatSelection() {
     }
   };
 
+  // Confirm and pass the booking to payment page
   const confirmBooking = () => {
     if (selected.length === 0) {
       alert("Please select at least one seat!");
@@ -41,10 +54,15 @@ export default function SeatSelection() {
 
     navigate("/payment", {
       state: {
-        seats: selected,                   // seat IDs
-        seatNumbers: seatNumbers,          // A1, A2...
+        seats: selected,
+        seatNumbers: seatNumbers,
         total: selected.length * 150,
-        showId: showId
+        showId: showId,
+
+        // ⭐ Prefer data from API → fallback to MovieShows
+        movieName: showInfo?.movie?.movieTitle || movieNameFromShows,
+        theatreName: showInfo?.theatre?.theatreName || theatreNameFromShows,
+        showTime: showInfo?.showTime || showTimeFromShows,
       }
     });
   };
@@ -78,11 +96,11 @@ export default function SeatSelection() {
           const isVip = seat.seatNumber.startsWith("A");
           const isBooked = seat.booked;
 
-          let bgColor = "#222"; // default available
+          let bgColor = "#222"; // Available
 
-          if (isBooked) bgColor = "#555";
-          else if (isVip) bgColor = "#0080ff"; // VIP
-          if (isSelected) bgColor = "#ffcc00"; // SELECTED always takes priority
+          if (isBooked) bgColor = "#555";           // Booked
+          else if (isVip) bgColor = "#0080ff";      // VIP
+          if (isSelected) bgColor = "#ffcc00";      // Selected
 
           return (
             <div
@@ -124,7 +142,11 @@ const styles = {
     color: "white",
     fontFamily: "Poppins, sans-serif",
   },
-  title: { textAlign: "center", color: "#ffcc00", marginBottom: "20px" },
+  title: {
+    textAlign: "center",
+    color: "#ffcc00",
+    marginBottom: "20px"
+  },
   screen: {
     background: "#ffcc00",
     width: "60%",
