@@ -1,0 +1,89 @@
+use authdb;
+select * from department;
+select * from users;
+select * from movies;
+select * from theatres;
+select * from shows;
+select * from seats;
+
+
+INSERT INTO shows (show_id, movie_id, theatre_id, show_time) VALUES
+-- RRR shows
+(1, 1, 1, '10:30 AM'),
+(2, 1, 1, '2:00 PM'),
+(3, 1, 2, '6:30 PM'),
+
+-- Pushpa shows
+(4, 2, 2, '11:00 AM'),
+(5, 2, 3, '3:15 PM'),
+
+-- Baahubali shows
+(6, 3, 4, '9:45 AM'),
+(7, 3, 4, '1:30 PM'),
+(8, 3, 1, '7:00 PM'),
+
+-- Baahubali 2
+(9, 4, 1, '10:00 AM'),
+(10, 4, 5, '4:00 PM'),
+
+-- Ala Vaikunthapurramuloo
+(11, 5, 3, '12:00 PM'),
+(12, 5, 5, '8:00 PM'),
+
+-- More shows to give variety
+(13, 1, 4, '5:00 PM'),
+(14, 2, 1, '9:00 PM'),
+(15, 3, 2, '10:00 PM');
+
+
+INSERT INTO theatres (theatre_id, theatre_name, location) VALUES
+(1, 'PVR Cinemas', 'Hyderabad'),
+(2, 'INOX Theatre', 'Visakhapatnam'),
+(3, 'AMBA Theatre', 'Vijayawada'),
+(4, 'Melody Theatre', 'Visakhapatnam'),
+(5, 'Asian GPR Multiplex', 'Warangal');
+
+
+
+
+INSERT INTO seats (show_id, seat_number, is_booked) VALUES
+(1, 'A1', false),(1, 'A2', false),(1, 'A3', false),(1, 'A4', false),(1, 'A5', false),
+(1, 'A6', false),(1, 'A7', false),(1, 'A8', false),(1, 'A9', false),(1, 'A10', false),
+
+(1, 'B1', false),(1, 'B2', false),(1, 'B3', false),(1, 'B4', false),(1, 'B5', false),
+(1, 'B6', false),(1, 'B7', false),(1, 'B8', false),(1, 'B9', false),(1, 'B10', false),
+
+(1, 'C1', false),(1, 'C2', false),(1, 'C3', false),(1, 'C4', false),(1, 'C5', false),
+(1, 'C6', false),(1, 'C7', false),(1, 'C8', false),(1, 'C9', false),(1, 'C10', false),
+
+(1, 'D1', false),(1, 'D2', false),(1, 'D3', false),(1, 'D4', false),(1, 'D5', false),
+(1, 'D6', false),(1, 'D7', false),(1, 'D8', false),(1, 'D9', false),(1, 'D10', false),
+
+(1, 'E1', false),(1, 'E2', false),(1, 'E3', false),(1, 'E4', false),(1, 'E5', false),
+(1, 'E6', false),(1, 'E7', false),(1, 'E8', false),(1, 'E9', false),(1, 'E10', false),
+
+(1, 'F1', false),(1, 'F2', false),(1, 'F3', false),(1, 'F4', false),(1, 'F5', false),
+(1, 'F6', false),(1, 'F7', false),(1, 'F8', false),(1, 'F9', false),(1, 'F10', false);
+
+
+
+
+
+INSERT INTO movies (movie_title, movie_image_url, duration, genre) VALUES
+('RRR', 'https://upload.wikimedia.org/wikipedia/en/d/d7/RRR_Poster.jpg', '3h 7m', 'Action'),
+('Pushpa: The Rise', 'https://www.impawards.com/intl/india/2021/posters/pushpa_the_rise__part_one_xlg.jpg', '2h 59m', 'Action/Drama'),
+('Baahubali: The Beginning', 'https://upload.wikimedia.org/wikipedia/en/7/7e/Baahubali_poster.jpg', '2h 39m', 'Epic'),
+('Baahubali 2: The Conclusion', 'https://upload.wikimedia.org/wikipedia/en/f/f9/Baahubali_the_Conclusion.jpg', '2h 47m', 'Epic'),
+('Ala Vaikunthapurramuloo', 'https://upload.wikimedia.org/wikipedia/en/6/6a/Ala_Vaikunthapurramuloo_poster.jpg', '2h 45m', 'Family/Drama'),
+('Srimanthudu', 'https://upload.wikimedia.org/wikipedia/en/2/2a/Srimanthudu_poster.jpg', '2h 38m', 'Action/Drama'),
+('Aravinda Sametha Veera Raghava', 'https://upload.wikimedia.org/wikipedia/en/e/e2/Aravinda_Sametha_Veera_Raghava_poster.jpg', '2h 42m', 'Action'),
+('Magadheera', 'https://upload.wikimedia.org/wikipedia/en/6/63/Magadheera_poster.jpg', '2h 44m', 'Fantasy/Action'),
+('Eega', 'https://upload.wikimedia.org/wikipedia/en/5/5f/Eega_poster.jpg', '2h 25m', 'Fantasy'),
+('Sye', 'https://upload.wikimedia.org/wikipedia/en/b/b3/Sye_poster.jpg', '2h 40m', 'Sports/Action'),
+('Temper', 'https://upload.wikimedia.org/wikipedia/en/a/a0/Temper_Telugu_film_poster.jpg', '2h 23m', 'Action'),
+('Athadu', 'https://upload.wikimedia.org/wikipedia/en/0/09/Athadu_poster.jpg', '2h 59m', 'Thriller'),
+('Julayi', 'https://upload.wikimedia.org/wikipedia/en/7/74/Julayi_poster.jpg', '2h 32m', 'Comedy/Action'),
+('Pokiri', 'https://upload.wikimedia.org/wikipedia/en/8/89/Pokiri_poster.jpg', '2h 35m', 'Action'),
+('Businessman', 'https://upload.wikimedia.org/wikipedia/en/0/0e/Businessman_Poster.jpg', '2h 31m', 'Crime/Action');
+
+truncate movies;
